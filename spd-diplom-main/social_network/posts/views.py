@@ -47,17 +47,17 @@ class PostView(APIView):
 
 class Post_1View(APIView):
     permission_classes([IsOwnerOrReadOnly])
-    def get (self,request, *arqs , **kwargs):
+    def get(self,request, *arqs , **kwargs):
         queryset=Post_1.objects.all()
         serializer=Post_1Serializer(queryset,many=True)
         return Response(serializer.data)
-    def post (self,request, *arqs , **kwargs):
+    def post(self,request, *arqs , **kwargs):
         queryset = Post_1.objects.all()
         serializer = Post_1Serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
-    def patch (self,request, *arqs , **kwargs):
+    def patch(self,request, *arqs , **kwargs):
         queryset = Post_1.objects.all()
         serializer = Post_1Serializer(data=request.data)
         if serializer.is_valid():
