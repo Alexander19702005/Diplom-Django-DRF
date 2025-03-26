@@ -7,22 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# class ExampleView(APIView):
-#     permission_classes = [IsAuthenticated]
-#
-#     def get(self, request, format=None):
-#         content = {
-#             'status': 'request was permitted'
-# #         }
-
-
-# class IsOwnerOrReadOnly(permissions.BasePermission):
-
-#     def has_object_permission(self, request, view, obj):
-#        if request.method in permissions.SAFE_METHODS:
-#             return True
-
-#        return obj.user == request.user
 
 
 
@@ -39,3 +23,21 @@ class AuthorOrReadOnly(permissions.BasePermission):
             return True
         return False
 
+
+
+# class ExampleView(APIView):
+#     permission_classes = [IsAuthenticated]
+#
+#     def get(self, request, format=None):
+#         content = {
+#             'status': 'request was permitted'
+# #         }
+
+
+# class IsOwnerOrReadOnly(permissions.BasePermission):
+
+#     def has_object_permission(self, request, view, obj):
+#        if request.method in permissions.SAFE_METHODS:
+#             return True
+
+#        return obj.user == request.user
