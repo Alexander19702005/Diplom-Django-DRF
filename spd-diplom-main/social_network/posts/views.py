@@ -37,8 +37,7 @@ class PostView(APIView):
         return Response(serializer.data)
 
     permission_classes = ([IsAuthorOrReadOnly])
-    def delete(self,request,*args,**kwargs):       
-
+    def delete(self,request,*args,**kwargs):     
         queryset = Post.objects.all()
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
@@ -75,6 +74,7 @@ class LikeView(APIView):
         queryset = Like.objects.all()
         serializer = LikeSerializer(queryset, many=True)
         return Response(serializer.data)
+        
     permission_classes=(IsAuthenticated)
     def post(self, request, *arqs, **kwargs):
         queryset = Like.objects.all()
