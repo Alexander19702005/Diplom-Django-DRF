@@ -46,7 +46,7 @@ class PostView(APIView):
         return Response(serializer.data)
 
 class Post_1View(APIView):
-    permission_classes([IsOwnerOrReadOnly])
+    permission_classes=([IsOwnerOrReadOnly])
     def get(self,request, *arqs , **kwargs):
         queryset=Post_1.objects.all()
         serializer=Post_1Serializer(queryset,many=True)
