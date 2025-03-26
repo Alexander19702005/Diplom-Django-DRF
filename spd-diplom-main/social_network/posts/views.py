@@ -20,7 +20,7 @@ class PostView(APIView):
         serializer=PostSerializer(queryset,many=True)
         return Response(serializer.data)
 
-
+    permission_classes=(IsAuthenticated)
     def post(self,request,*args,**kwargs):
         queryset = Post.objects.all()
         serializer = PostSerializer(data=request.data)
@@ -28,7 +28,7 @@ class PostView(APIView):
             serializer.save()
         return Response(serializer.data)
 
-
+    permission_classes = ([IsOwnerOrReadOnly])
     def patch(self,request,*args,**kwargs):        
         queryset = Post.objects.all()
         serializer = PostSerializer(data=request.data)
@@ -36,7 +36,7 @@ class PostView(APIView):
             serializer.save()
         return Response(serializer.data)
 
-
+    permission_classes = ([IsOwnerOrReadOnly])
     def delete(self,request,*args,**kwargs):       
 
         queryset = Post.objects.all()
@@ -46,17 +46,21 @@ class PostView(APIView):
         return Response(serializer.data)
 
 class Post_1View(APIView):
-    permission_classes=([IsOwnerOrReadOnly])
+    permission_classes=(IsAuthenticated)
     def get(self,request, *arqs , **kwargs):
         queryset=Post_1.objects.all()
         serializer=Post_1Serializer(queryset,many=True)
         return Response(serializer.data)
+        
+    permission_classes=(IsAuthenticated) 
     def post(self,request, *arqs , **kwargs):
         queryset = Post_1.objects.all()
         serializer = Post_1Serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
+        
+    permission_classes=([IsOwnerOrReadOnly])
     def patch(self,request, *arqs , **kwargs):
         queryset = Post_1.objects.all()
         serializer = Post_1Serializer(data=request.data)
@@ -71,7 +75,7 @@ class LikeView(APIView):
         queryset = Like.objects.all()
         serializer = LikeSerializer(queryset, many=True)
         return Response(serializer.data)
-
+    permission_classes=(IsAuthenticated)
     def post(self, request, *arqs, **kwargs):
         queryset = Like.objects.all()
         serializer = LikeSerializer(data=request.data)
