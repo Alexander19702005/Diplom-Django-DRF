@@ -15,7 +15,7 @@ from rest_framework import generics
 
 class PostView(APIView):
     permission_classes = ([IsOwnerOrReadOnly])
-    def get (self,request, *arqs , **kwargs):
+    def get(self,request, *arqs , **kwargs):
         queryset=Post.objects.all()
         serializer=PostSerializer(queryset,many=True)
         return Response(serializer.data)
