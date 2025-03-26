@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import (IsAuthenticated, IsAdminUser, SAFE_METHODS)
 from rest_framework.permissions import   (IsAuthenticatedOrReadOnly)
-from .permissions import (IsOwnerOrReadOnly)
+from .permissions import (IsAuthorOrReadOnly)
 from rest_framework import generics
 
 
@@ -28,7 +28,7 @@ class PostView(APIView):
             serializer.save()
         return Response(serializer.data)
 
-    permission_classes = ([IsOwnerOrReadOnly])
+    permission_classes = ([IsAuthorOrReadOnly])
     def patch(self,request,*args,**kwargs):        
         queryset = Post.objects.all()
         serializer = PostSerializer(data=request.data)
@@ -36,7 +36,7 @@ class PostView(APIView):
             serializer.save()
         return Response(serializer.data)
 
-    permission_classes = ([IsOwnerOrReadOnly])
+    permission_classes = ([IsAuthorOrReadOnly])
     def delete(self,request,*args,**kwargs):       
 
         queryset = Post.objects.all()
@@ -60,7 +60,7 @@ class Post_1View(APIView):
             serializer.save()
         return Response(serializer.data)
         
-    permission_classes=([IsOwnerOrReadOnly])
+    permission_classes=([IsAuthorOrReadOnly])
     def patch(self,request, *arqs , **kwargs):
         queryset = Post_1.objects.all()
         serializer = Post_1Serializer(data=request.data)
