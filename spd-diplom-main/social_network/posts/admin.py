@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Post, Like,Post_1
+from .models import Post,Comment, Like
 
 admin.site.register(Post)
 #admin.site.register(Message)
 admin.site.register(Like)
-admin.site.register(Post_1)
+admin.site.register(Comment)
 #admin.site.register(Proba)
 
 class PostAdmin(admin.ModelAdmin):
