@@ -12,14 +12,14 @@ User = get_user_model()
 #Создаём модель Посты с фото
 class Post(models.Model):
 
-      text=models.TextField(max_length=256,default='прекрасное фото')
+      text=models.TextField(default='прекрасное фото')
       author = models.ForeignKey(User,verbose_name = 'Пользователь', on_delete=models.CASCADE, blank=True)
-      image = models.ImageField(upload_to='static',verbose_name='Изображение',null=True,default=None)
+      image = models.ImageField(upload_to='static/',verbose_name='Изображение',null=True,default=None)
       created_at=models.DateTimeField(null=True,default=datetime.now)
 
 
       def __str__(self):
-            return self.text
+            return self.text[:50]
 
       class Meta:
           verbose_name = 'Фотография'
@@ -27,17 +27,15 @@ class Post(models.Model):
 
 
 #Создаём модель Комментарии
-class Post_1(models.Model):
-    text_1 = models.TextField(max_length=500, default='The best')
-    user_1 = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    #image = models.ImageField(upload_to='static', verbose_name='Изображение', null=True, default=None)
-    created_at_1 = models.DateTimeField(null=True, default=datetime.now)
-    image_1 = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
-
+class Comment(models.Model):
+    text = models.TextField(default='The best')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True,blank=True)
+    created_at = models.DateTimeField(null=True, default=datetime.now)
 
 
     def __str__(self):
-        return self.text_1
+        return self.text
 
     class Meta:
         verbose_name = 'Комментарий'
@@ -46,14 +44,13 @@ class Post_1(models.Model):
 #Создаём модель Лайков
 class Like(models.Model):
 
-      like = models.CharField(max_length=4,default='like')
       user = models.ForeignKey(User, on_delete=models.CASCADE)
       post = models.ForeignKey(Post, on_delete=models.CASCADE)
       #likes_count = like.objects.filter.count(like)
 
 
       def __str__(self):
-            return self.like
+             return f"Like by {self.user} on {self.post}"
 
       def likes_count(self):
           return self.likes.all().count()
