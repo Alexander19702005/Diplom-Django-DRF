@@ -1,87 +1,58 @@
 from rest_framework.decorators import api_view, permission_classes
-from .models import Post
-from .models import Post_1
-from .models import Like
-from .serializers import LikeSerializer
-from .serializers import PostSerializer
-from .serializers import Post_1Serializer
+from .models import Post,Comment,Like
+from .serializers import PostSerializer,CommentSerializer,LikeSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import (IsAuthenticated, IsAdminUser, SAFE_METHODS)
 from rest_framework.permissions import   (IsAuthenticatedOrReadOnly)
-from .permissions import (IsAuthorOrReadOnly)
+from .permissions import (AuthorOrReadOnly,IsOwnerOrReadOnly)
 from rest_framework import generics
 
 
-class PostView(APIView):
-    permission_classes=(IsAuthenticated)
-    def get(self,request, *arqs , **kwargs):
-        queryset=Post.objects.all()
-        serializer=PostSerializer(queryset,many=True)
-        return Response(serializer.data)
 
-    permission_classes=(IsAuthenticated)
-    def post(self,request,*args,**kwargs):
-        queryset = Post.objects.all()
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
+class PostListCreateView(generics.ListCreateAPIView):
+    queryset=Post.objects.all()
+    serializer=PostSerializer(queryset,many=True)
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-    permission_classes = ([IsAuthorOrReadOnly])
-    def patch(self,request,*args,**kwargs):        
-        queryset = Post.objects.all()
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
+class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
-    permission_classes = ([IsAuthorOrReadOnly])
-    def delete(self,request,*args,**kwargs):     
-        queryset = Post.objects.all()
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
 
-class Post_1View(APIView):
-    permission_classes=(IsAuthenticated)
-    def get(self,request, *arqs , **kwargs):
-        queryset=Post_1.objects.all()
-        serializer=Post_1Serializer(queryset,many=True)
-        return Response(serializer.data)
-        
-    permission_classes=(IsAuthenticated) 
-    def post(self,request, *arqs , **kwargs):
-        queryset = Post_1.objects.all()
-        serializer = Post_1Serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
-        
-    permission_classes=([IsAuthorOrReadOnly])
-    def patch(self,request, *arqs , **kwargs):
-        queryset = Post_1.objects.all()
-        serializer = Post_1Serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
+class CommentListCreateView(generics.ListCreateAPIView):
+     queryset=Comment.objects.all()
+     serializer = CommentSerializer(queryset,many=True)
+     permission_classes = [IsAuthenticatedOrReadOnly]
+     def perform_create(self, serializer):
+         serializer.save(user=self.request.user)
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer = CommentSerializer(queryset, many=True)
+    permission_classes = [IsOwnerOrReadOnly]
+
 
 
 class LikeView(APIView):
-    permission_classes=(IsAuthenticated)
+    permission_classes=[IsAuthenticated]
     def get(self, request, *arqs, **kwargs):
-        queryset = Like.objects.all()
-        serializer = LikeSerializer(queryset, many=True)
+        likes = Like.objects.all()
+        serializer = LikeSerializer(likes, many=True)
         return Response(serializer.data)
         
-    permission_classes=(IsAuthenticated)
-    def post(self, request, *arqs, **kwargs):
-        queryset = Like.objects.all()
-        serializer = LikeSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
 
+    def post(self, request, *arqs, **kwargs):
+        post_id=request.data.get("post")
+        post = Post.objects.get(id=post_id)
+        queryset = Like.objects.all()
+        like,created = Like.objects.get_or_create(user=request.user,post=post)
+        if not created:
+            like.delete()
+            return Response({"message":"Like removed"},status=204)
+        return Response({"message":"Liked"},status=201)
 
 
