@@ -14,28 +14,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-#from xml.dom.minidom import Comment
-
-#import path
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework import routers
-from posts.views import PostView,LikeView,Post_1View
+from posts.views import PostListCreateView,PostDetailView,CommentListCreateView,CommentDetailView,LikeView
 from rest_framework.response import Response
 from posts.views import APIView
 from rest_framework import viewsets
 from rest_framework import routers, serializers, viewsets
-#from dj_rest_auth.registration.views import RegisterView
-#from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView
 from django.urls import path
-
-
-#from rest_framework.views import LikeView,PostView,CommentView
-
-
-
 
 router = routers.DefaultRouter()
 
@@ -45,9 +34,11 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('post/', PostView.as_view()),
-    path('like/',LikeView.as_view()),
-    path('comment/',Post_1View.as_view()),
+    path('post_create/', PostListCreateView.as_view()),
+    path('post/<int:pk>/', PostDetailView.as_view()),
+    path('like',LikeView.as_view()),
+    path('comment_create/<int:pk>',CommentListCreateView.as_view()),
+    path('comment_read/<int:pk>',CommentDetailView.as_view())
 
 ]
 #path('api/post', PostView.as_view()),
@@ -62,4 +53,3 @@ if settings.DEBUG:
 #if settings.DEBUG:
     #urlpatterns += static(settings.MEDIA_URL,
                          # document_root=settings.MEDIA_ROOT)]
-#
