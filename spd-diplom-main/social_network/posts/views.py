@@ -12,7 +12,7 @@ from rest_framework import generics
 
 class PostListCreateView(generics.ListCreateAPIView):
     queryset=Post.objects.all()
-    serializer=PostSerializer(queryset,many=True)
+    serializer=PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -32,7 +32,7 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
-    serializer = CommentSerializer(queryset, many=True)
+    serializer = CommentSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
 
