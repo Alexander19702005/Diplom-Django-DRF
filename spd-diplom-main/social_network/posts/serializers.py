@@ -17,6 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
 # Сериализатор для постов с фото
 class PostSerializer(serializers.ModelSerializer):
     author=serializers.HiddenField(default=serializers.CurrentUserDefault())
+    created_at=serializers.HiddenField(default=serializers.CurrentUserDefault())
     comment=CommentSerializer(many=False,read_only=True,source=('author'))
     likes_count = serializers.SerializerMethodField()
 
