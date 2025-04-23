@@ -25,7 +25,7 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class CommentListCreateView(generics.ListCreateAPIView):
      queryset=Comment.objects.all()
-     serializer = CommentSerializer(queryset,many=True)
+     serializer = CommentSerializer
      permission_classes = [IsAuthenticatedOrReadOnly]
      def perform_create(self, serializer):
          serializer.save(user=self.request.user)
