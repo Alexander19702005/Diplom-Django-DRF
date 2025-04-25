@@ -21,7 +21,8 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsOwnerOrReadOnly]
-
+    def perform_update(self, serializer):
+        serializer.save(author=self.request.user)
 
 class CommentListCreateView(generics.ListCreateAPIView):
      queryset=Comment.objects.all()
